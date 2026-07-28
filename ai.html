@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEBED.ai — Neural Interface v0.1-beta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700&family=Press+Start+2P&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<div class="app-layout">
+  
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="logo-core">L</div>
+        <div class="brand-title">LEBED<span>.ai</span></div>
+      </div>
+      <button id="toggleSidebar" style="background:none; border:none; color:var(--muted); cursor:pointer; padding: 4px; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+    </div>
+
+    <button class="new-chat-btn" id="newChatBtn">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+        <span>New chat</span>
+      </div>
+      <span class="shortcut-tag">Ctrl+Shift+O</span>
+    </button>
+
+    <div class="recents-header">
+      <span class="recents-title">Recents</span>
+      <button class="clear-all-btn" id="clearAllBtn" title="Clear all history">Clear All</button>
+    </div>
+
+    <div class="history-list" id="historyList"></div>
+
+    <div class="user-profile" id="userProfileCard">
+      <div class="user-info">
+        <div class="user-avatar" id="sidebarAvatar">U</div>
+        <div class="user-name" id="sidebarUserName">User Profile</div>
+      </div>
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--muted);"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </div>
+    
+  </aside>
+
+  <main class="main-workspace">
+    <header>
+      <div class="header-actions"></div>
+
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>LEBED Core v0.1-beta</span>
+      </div>
+    </header>
+
+    <div class="chat-viewport" id="chatViewport">
+      <div class="chat-container">
+        <div class="hero-greeting" id="heroGreeting">
+          <div class="typewriter-title">
+            <div id="typewriterContainer"></div><span class="cursor"></span>
+          </div>
+          <p>How can I assist you today?</p>
+        </div>
+        <div class="message-list" id="messageList"></div>
+      </div>
+    </div>
+
+    <div class="input-wrapper">
+      <div class="prompt-box">
+        <input type="text" id="userInput" class="prompt-input" placeholder="Ask anything..." autocomplete="off">
+        <button class="action-btn" id="sendBtn">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+        </button>
+      </div>
+      <div class="input-footer">
+        LEBED.ai v0.1-beta — Founded By Omar Mahmoudi
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<div class="modal-overlay" id="profileModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">User Profile</div>
+      <button class="close-modal-btn" onclick="closeModal('profileModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+      <div class="avatar-upload-wrapper" id="uploadAvatarTrigger" title="Click to upload image">
+        <div class="modal-avatar-preview" id="modalAvatarPreview">U</div>
+        <div class="upload-overlay-ic">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Display Name</label>
+        <input type="text" class="form-input" id="nameInput" placeholder="Your Name">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('profileModal')">Cancel</button>
+      <button class="btn btn-save" id="saveProfileBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">API Configuration</div>
+      <button class="close-modal-btn" onclick="closeModal('settingsModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">API Endpoint</label>
+        <input type="text" class="form-input" id="apiEndpointInput" placeholder="https://openrouter.ai/api/v1/chat/completions">
+      </div>
+      <div class="form-group">
+        <label class="form-label">API Key</label>
+        <input type="password" class="form-input" id="apiKeyInput" placeholder="sk-or-v1-...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Model Name</label>
+        <input type="text" class="form-input" id="apiModelInput" placeholder="openai/gpt-4o-mini">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">Cancel</button>
+      <button class="btn btn-save" id="saveSettingsBtn">Save Configuration</button>
+    </div>
+  </div>
+</div>
+
+<div id="cmdPalette">
+  <input type="text" id="cmdInput" placeholder="Command...">
+  <div id="cmdList">
+    <div class="cmd-item active">Switch Font <span>Ctrl+F</span></div>
+    <div class="cmd-item">Clear Chat <span>Ctrl+L</span></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
