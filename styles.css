@@ -600,22 +600,33 @@ header {
     left: 0;
   }
 }
+/* LEBED.ai Logo Container */
 .logo-core {
-  width: 36px;
-  height: 36px;
-  background-color: #4A4D52;   /* اللون الرمادي متاع الخلفية */
-  border-radius: 50%;          /* دائرية 100% */
+  /* Step 1: Create a consistent, square container */
+  width: 36px;                 /* Adjust size as needed */
+  height: 36px;                /* Must match width for a circle */
+  
+  /* Step 2: Apply the grey circular background to the container */
+  background-color: #4A4D52;   /* A professional grey color */
+  border-radius: 50%;          /* Makes the container a perfect circle */
+  
+  /* Step 3: Precisely center the logo image inside the circle */
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;            /* يمنع البروز للخارج */
+  align-items: center;        /* Centered vertically */
+  justify-content: center;     /* Centered horizontally */
+  
+  /* Step 4: Ensure nothing spills out of the circle */
+  overflow: hidden;
+  
+  /* Step 5: Prevent layout shifts */
   box-sizing: border-box;
-  padding: 3px;                /* مسافة صغيرة باش تظهر خلفية الدائرة الرمادية داير وراير */
 }
 
+/* LEBED.ai Logo Image (Inside the container) */
 .logo-core img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;         /* بدّلنا cover بـ contain باش تظهر التصويرة كاملة في الوسط وما تتقصّش */
-  border-radius: 50%;          /* يضمن إن الصورة نفسها تتصنع على شكل دائري */
-}
+  /* Step 6: This is the fix. Scale the image down to fit INSIDE the container. */
+  max-width: 100%;            
+  max-height: 100%;            
+  
+
+  object-fit: contain;
