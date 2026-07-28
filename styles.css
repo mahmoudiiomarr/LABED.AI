@@ -578,22 +578,6 @@ header {
   display: flex; justify-content: space-between; font-family: var(--mono);
 }
 .cmd-item.active { background: var(--primary); color: #000; }
-@media (max-width: 768px) {
-    .sidebar {
-        position: fixed !important;
-        left: -100% !important; /* مخفية تماماً على اليسار */
-        top: 0;
-        width: 100% !important; /* تاخذ عرض الشاشة */
-        height: 100% !important;
-        z-index: 9999 !important;
-        transition: left 0.3s ease !important;
-        background: #000 !important; /* لون الخلفية */
-    }
-
-    /* هذي الكلاس اللي الـ JS باش يزيدها */
-    .sidebar.active {
-        left: 0 !important; /* تولي ظاهرة */
-    }
 }
 .header-actions {
   display: flex;
