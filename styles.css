@@ -587,21 +587,3 @@ header {
     z-index: 1000;
     transition: left 0.3s ease;
   }
-
-  /* كي يولي active، يظهر */
-  aside.sidebar.active {
-    left: 0;
-  }
-
-  /* صغّر الـ chat container باش ياخذ المساحة الكل */
-  .chat-container {
-    width: 100%;
-    padding: 10px;
-  }
-
-  /* صغّر الـ input field باش يجي قد الـ شاشة */
-  .input-wrapper {
-    width: 100%;
-    padding: 10px;
-  }
-}
