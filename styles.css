@@ -619,3 +619,30 @@ header {
   border-radius: 50%;
   display: block;
 }
+
+
+#toggleSidebar {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 10px; /* كبرنا المساحة شوية باش صبعك يجيبها بالساهل في التلفون */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* يمنع تحديد النص وظهران القائمة متاع Copy/Select */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  
+  /* تحسين الاستجابة للتاتش على التلفونات */
+  touch-action: manipulation;
+  position: relative;
+  z-index: 100; /* يضمن إن الزر جاي فوق كل شي وماهوش متغطي */
+}
+
+/* يضمن إن الـ SVG داخل الزر ما يعطلش النزلة */
+#toggleSidebar svg {
+  pointer-events: none;
+}
