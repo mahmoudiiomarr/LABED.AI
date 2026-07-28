@@ -553,3 +553,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Error: Toggle button or Sidebar not found!");
     }
 });
+const sidebar = document.querySelector('.sidebar');
+const toggleBtn = document.getElementById('toggleSidebar'); // تأكد إن الـ ID صحيح
+
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+});
