@@ -578,24 +578,3 @@ header {
   display: flex; justify-content: space-between; font-family: var(--mono);
 }
 .cmd-item.active { background: var(--primary); color: #000; }
-/* للـ تليفونات (شاشة أقل من 768px) */
-@media (max-width: 768px) {
-  aside.sidebar {
-    position: fixed;
-    left: -260px; /* مخبي في العادة */
-    height: 100%;
-    z-index: 1000;
-  }
-
-  aside.sidebar.active {
-    left: 0; /* كي يولي active يظهر */
-  }
-
-  .chat-container {
-    width: 95%; /* ياخذ أغلب مساحة الشاشة */
-  }
-
-  .typewriter-title {
-    font-size: 1.5rem; /* نصغروا العنوان باش يجي سطر واحد */
-  }
-}
