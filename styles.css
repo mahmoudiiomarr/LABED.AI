@@ -578,3 +578,10 @@ header {
   display: flex; justify-content: space-between; font-family: var(--mono);
 }
 .cmd-item.active { background: var(--primary); color: #000; }
+@media (max-width: 768px) {
+    /* هذي هي الـ "حاجة" اللي تخبي الـ Sidebar ديفولت */
+    .sidebar { display: none; }
+
+    /* هذي تظهرها كي تولي الـ class متاعها active */
+    .sidebar.active { display: flex; position: fixed; top: 0; left: 0; width: 260px; height: 100%; z-index: 999; background: #000; }
+}
