@@ -541,4 +541,6 @@ themeToggle.addEventListener('click', () => {
     localStorage.removeItem('theme');
   }
 });
-
+document.querySelector('.menu-toggle-btn').addEventListener('click', () => {
+  document.querySelector('.sidebar').classList.toggle('active');
+});
