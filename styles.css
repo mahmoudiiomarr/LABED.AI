@@ -584,3 +584,19 @@ header {
   align-items: center;
   gap: 15px; /* Adds space between the button and the badge */
 }
+/* هذا الكود يخدم كان في الشاشات الصغيرة (تلفونات) */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px; /* نخبيوه على اليسار */
+    height: 100vh;
+    z-index: 1000;
+    transition: 0.3s; /* باش تظهر الحركة ناعمة */
+  }
+
+  /* كلاس جديد باش تظهره كيف تنزل على البوتون */
+  .sidebar.active {
+    left: 0;
+  }
+}
