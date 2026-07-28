@@ -595,3 +595,8 @@ header {
         left: 0 !important; /* تولي ظاهرة */
     }
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Adds space between the button and the badge */
+}
