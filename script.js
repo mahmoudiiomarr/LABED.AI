@@ -541,6 +541,15 @@ themeToggle.addEventListener('click', () => {
     localStorage.removeItem('theme');
   }
 });
-document.getElementById('toggleSidebar').addEventListener('click', () => {
-    document.querySelector('.sidebar').classList.toggle('active');
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    } else {
+        console.log("Error: Toggle button or Sidebar not found!");
+    }
 });
