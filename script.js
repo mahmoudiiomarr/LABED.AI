@@ -541,3 +541,12 @@ themeToggle.addEventListener('click', () => {
     localStorage.removeItem('theme');
   }
 });
+// Function للـ Mobile Toggle
+const menuBtn = document.querySelector('.menu-toggle-btn'); // لازمك تزيد الزر هذا في الـ HTML
+const sidebar = document.querySelector('.sidebar');
+
+if (menuBtn) {
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+  });
+}
