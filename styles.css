@@ -584,20 +584,21 @@ header {
   align-items: center;
   gap: 15px; /* Adds space between the button and the badge */
 }
-/* هذا الكود يخدم كان في الشاشات الصغيرة (تلفونات) */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
     top: 0;
-    left: -280px; /* نخبيوه على اليسار */
+    left: -280px; /* مخفية على اليسار */
+    width: 280px;  /* تأكد إن العرض محدد */
     height: 100vh;
-    z-index: 1000;
-    transition: 0.3s; /* باش تظهر الحركة ناعمة */
+    z-index: 9999; /* رقم عالي باش تظهر فوق كل شي في الصفحة */
+    transition: left 0.3s ease-in-out; /* حركة سلسة */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* ضل باش تبان طالعة فوق الصفحة */
   }
 
-  /* كلاس جديد باش تظهره كيف تنزل على البوتون */
+  /* كي نزيدو كلاس active تخرج الـ sidebar */
   .sidebar.active {
-    left: 0;
+    left: 0 !important;
   }
 }
 .logo-core {
