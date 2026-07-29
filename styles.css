@@ -578,7 +578,7 @@ header {
   display: flex; justify-content: space-between; font-family: var(--mono);
 }
 .cmd-item.active { background: var(--primary); color: #000; }
-}
+
 .header-actions {
   display: flex;
   align-items: center;
