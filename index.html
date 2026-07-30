@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<title>LEBED.ai v0.1-beta — Founded By Omar Mahmoudi</title>
+<title>LEBED.ai v0.2-beta — Founded By Omar Mahmoudi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700&family=Press+Start+2P&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -21,11 +21,10 @@
     <div class="sidebar-header">
       <div class="brand">
         <div class="logo-core">
-  <img src="logo pref.png" alt="Logo">
-</div>
+          <img src="logo pref.png" alt="LEBED.ai" class="pixel-logo">
+        </div>
         <div class="brand-title">LEBED<span>.ai</span></div>
       </div>
-     
     </div>
 
     <button class="new-chat-btn" id="newChatBtn">
@@ -34,6 +33,13 @@
         <span>New chat</span>
       </div>
       <span class="shortcut-tag">Ctrl+Shift+O</span>
+    </button>
+
+    <button class="support-btn" id="supportBtn">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg>
+        <span>Support Us</span>
+      </div>
     </button>
 
     <div class="recents-header">
@@ -48,33 +54,45 @@
         <div class="user-avatar" id="sidebarAvatar">U</div>
         <div class="user-name" id="sidebarUserName">User Profile</div>
       </div>
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--muted);"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--muted); flex-shrink:0;" id="settingsGearBtn" title="API Configuration"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     </div>
-    
   </aside>
 
   <main class="main-workspace">
     <header>
       <div class="header-actions">
-
-         <button id="toggleSidebar" style="background:none; border:none; color:var(--muted); cursor:pointer; padding: 4px; display: flex; align-items: center; justify-content: center;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
-      </button>
+        <button id="toggleSidebar" style="background:none; border:none; color:var(--muted); cursor:pointer; padding: 4px; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <!-- Navbar Logo (small) -->
+        <div class="navbar-brand">
+          <img src="logo pref.png" alt="LEBED.ai" class="navbar-logo">
+          <span class="navbar-title">LEBED<span>.ai</span></span>
+        </div>
+        <button id="themeToggle" title="Toggle dark / light mode" style="background:none; border:none; color:var(--muted); cursor:pointer; padding: 4px; display: flex; align-items: center; justify-content: center;">
+          <svg id="themeIconMoon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+          <svg id="themeIconSun" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+        </button>
       </div>
 
       <div class="status-badge">
         <span class="status-dot"></span>
-        <span>LEBED Core v0.1-beta</span>
+        <span>LEBED Core v0.2-beta</span>
       </div>
     </header>
 
     <div class="chat-viewport" id="chatViewport">
       <div class="chat-container">
         <div class="hero-greeting" id="heroGreeting">
+          <!-- Hero Logo -->
+          <div class="hero-logo-container">
+            <img src="logo pref.png" alt="LEBED.ai" class="hero-logo">
+            <div class="hero-badge">AI Powered</div>
+          </div>
           <div class="typewriter-title">
             <div id="typewriterContainer"></div><span class="cursor"></span>
           </div>
-          <p>How can I assist you :D </p>
+          <p>How can I assist you :D</p>
         </div>
         <div class="message-list" id="messageList"></div>
       </div>
@@ -83,18 +101,34 @@
     <div class="input-wrapper">
       <div class="prompt-box">
         <input type="text" id="userInput" class="prompt-input" placeholder="Ask anything..." autocomplete="off">
+        
+        <button class="action-btn file-btn" id="fileBtn" title="Upload files">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+        </button>
+        <input type="file" id="fileInput" multiple style="display:none;">
+        
+        <button class="action-btn mic-btn" id="micBtn" title="Speech to text">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"></path><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"></path></svg>
+        </button>
         <button class="action-btn" id="sendBtn">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
         </button>
       </div>
+      <div class="file-preview-container" id="filePreviewContainer"></div>
+      <div class="api-key-warning" id="apiKeyWarning" style="display:none;">
+        ⚠ No API key configured — click the <strong>⚙</strong> icon next to your profile (bottom-left) to add your endpoint, key, and model.
+      </div>
       <div class="input-footer">
-        LEBED.ai v0.1-beta — Founded By Omar Mahmoudi
+        LEBED.ai v0.2-beta — Founded By Omar Mahmoudi
       </div>
     </div>
   </main>
-
 </div>
 
+<!-- ===== MODALS ===== -->
 <div class="modal-overlay" id="profileModal">
   <div class="modal-card">
     <div class="modal-header">
@@ -144,6 +178,134 @@
     <div class="modal-footer">
       <button class="btn btn-cancel" onclick="closeModal('settingsModal')">Cancel</button>
       <button class="btn btn-save" id="saveSettingsBtn">Save Configuration</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="supportModal">
+  <div class="modal-card support-modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Support LEBED.ai</div>
+      <button class="close-modal-btn" onclick="closeModal('supportModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="donate-sticker-wrapper">
+        <img src="donate.png" alt="Support LEBED.ai" class="donate-sticker">
+      </div>
+      <p class="support-subtitle">Every contribution helps keep LEBED.ai alive and growing. Choose your preferred option below 🧡</p>
+
+      <div class="support-tabs">
+        <button class="support-tab-btn active" id="tabUsdBtn" onclick="switchSupportTab('usd')">🌍 USD (International)</button>
+        <button class="support-tab-btn" id="tabTndBtn" onclick="switchSupportTab('tnd')">🇹🇳 TND (Tunisia)</button>
+      </div>
+
+      <div class="support-tab-content active" id="usdTabContent">
+        <div class="kofi-card">
+          <div class="kofi-icon">☕</div>
+          <div class="kofi-text">
+            <div class="kofi-title">Buy me a coffee</div>
+            <div class="kofi-desc">Support via Ko-fi — quick, secure, international.</div>
+          </div>
+          <a href="https://ko-fi.com/mahmoudiiomarr" target="_blank" rel="noopener noreferrer" class="kofi-btn">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg>
+            Support on Ko-fi
+          </a>
+        </div>
+      </div>
+
+      <div class="support-tab-content" id="tndTabContent">
+        <div class="payment-card">
+          <div class="payment-row">
+            <div class="payment-info">
+              <span class="payment-label">D17 (PostePay)</span>
+              <span class="payment-value" id="val-d17">53356828</span>
+            </div>
+            <button class="copy-payment-btn" data-copy-target="val-d17">Copy</button>
+          </div>
+          <div class="payment-row">
+            <div class="payment-info">
+              <span class="payment-label">Flouci Phone</span>
+              <span class="payment-value" id="val-flouci">53356828</span>
+            </div>
+            <button class="copy-payment-btn" data-copy-target="val-flouci">Copy</button>
+          </div>
+          <div class="payment-row">
+            <div class="payment-info">
+              <span class="payment-label">RIB Bancaire (BTE)</span>
+              <span class="payment-value" id="val-rib">24 031 209 4432 511101 65</span>
+            </div>
+            <button class="copy-payment-btn" data-copy-target="val-rib">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('supportModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="changelogModal">
+  <div class="modal-card changelog-modal-card">
+    <div class="changelog-header">
+      <div class="changelog-title">🚀 What's New in LEBED.ai v0.2-beta</div>
+      <p class="changelog-subtitle">We've made some big upgrades to improve your experience!</p>
+    </div>
+    <div class="modal-body changelog-body">
+      <ul class="changelog-list">
+        <li>
+          <span class="changelog-icon">🎨</span>
+          <div class="changelog-text">
+            <strong>UI/UX Overhaul</strong>
+            <span>Fresh new interface changes and a dedicated Dark/Light Mode toggle switch (Dark mode is default).</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">📱</span>
+          <div class="changelog-text">
+            <strong>Mobile Optimized</strong>
+            <span>Completely rebuilt UI/UX for seamless usage on mobile phones and tablets.</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">🛡️</span>
+          <div class="changelog-text">
+            <strong>Safe for Everyone</strong>
+            <span>Enhanced AI guardrails making it secure and suitable for all age groups (including under 18).</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">🎙️</span>
+          <div class="changelog-text">
+            <strong>Voice-to-Text</strong>
+            <span>Speak directly to the AI with our new voice input option.</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">📁</span>
+          <div class="changelog-text">
+            <strong>File &amp; Image Uploads</strong>
+            <span>Attach photos and files directly into your conversations.</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">💻</span>
+          <div class="changelog-text">
+            <strong>Enhanced Developer Experience</strong>
+            <span>Improved code block formatting with custom syntax highlighting and 1-click Direct Copy buttons.</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">☕</span>
+          <div class="changelog-text">
+            <strong>Support the Project</strong>
+            <span>Added a dedicated Support/Donate option for USD &amp; TND to help keep LEBED.ai running!</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="modal-footer changelog-footer">
+      <button class="btn btn-save changelog-btn" id="changelogCloseBtn">Explore v0.2-beta 🚀</button>
     </div>
   </div>
 </div>
