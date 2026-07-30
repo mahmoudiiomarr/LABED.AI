@@ -208,10 +208,13 @@ body.light-mode #themeIconSun { display: flex !important; }
 
 html, body {
   height: 100%;
+  width: 100%;
+  max-width: 100%;
   background: var(--bg);
   color: var(--text);
   font-family: var(--body);
   overflow: hidden;
+  overflow-x: hidden;
 }
 
 #canvas-bg {
@@ -896,11 +899,13 @@ header {
 
 .chat-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 24px; margin: auto 0; }
 
-.hero-greeting { 
-  text-align: center; 
+.hero-greeting {
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .typewriter-title {
@@ -909,10 +914,14 @@ header {
   margin-bottom: 12px;
   letter-spacing: -0.5px;
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   color: var(--text);
   min-height: 1.2em;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  padding: 0 8px;
 }
 
 .hero-greeting p { 
@@ -967,9 +976,21 @@ header {
 
 .message-list { display: flex; flex-direction: column; gap: 22px; width: 100%; padding-bottom: 20px; }
 
-.msg-row { display: flex; gap: 12px; max-width: 88%; position: relative; }
+.msg-row { display: flex; gap: 12px; max-width: 88%; position: relative; min-width: 0; }
 .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
 .msg-row.ai { align-self: flex-start; }
+
+/* Flex/grid children default to min-width:auto, which lets long unbroken
+   content (like code) force the container wider than the viewport instead
+   of shrinking. This chain is what actually stops mobile overflow. */
+.msg-content,
+.bubble,
+.code-block-wrapper,
+.code-body,
+.code-body pre,
+.code-body pre code {
+  min-width: 0;
+}
 
 .avatar {
   width: 34px; height: 34px; border-radius: 10px;
@@ -1039,7 +1060,7 @@ header {
 }
 
 .prompt-input {
-  flex: 1; background: transparent; border: none; outline: none;
+  flex: 1; min-width: 0; background: transparent; border: none; outline: none;
   color: var(--text); font-family: var(--body); font-size: 1rem;
 }
 
@@ -1173,6 +1194,8 @@ header {
   font-size: 0.75rem;
   color: var(--muted);
   margin-top: 15px;
+  max-width: 100%;
+  overflow-wrap: break-word;
   background: linear-gradient(90deg, #8E8E96 0%, #FFFFFF 50%, #8E8E96 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -1292,6 +1315,8 @@ header {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .code-block-wrapper:hover {
@@ -1370,9 +1395,11 @@ header {
 .code-body {
   padding: 16px 18px;
   overflow-x: auto;
+  max-width: 100%;
   background: var(--code-bg);
   scrollbar-width: thin;
   scrollbar-color: #f76907 #1e1e26;
+  -webkit-overflow-scrolling: touch;
 }
 
 .code-body::-webkit-scrollbar {
@@ -1401,15 +1428,19 @@ header {
   color: var(--text);
   white-space: pre-wrap;
   word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 
 .code-body pre code {
+  display: block;
   font-family: inherit;
   font-size: inherit;
   color: inherit;
   background: transparent;
   padding: 0;
   border: none;
+  max-width: 100%;
 }
 
 /* Syntax highlighting */
@@ -1464,7 +1495,9 @@ header {
   .bubble { padding: 12px 14px; font-size: 0.92rem; }
 
   .input-wrapper { padding: 0 12px 14px 12px; }
-  .prompt-box { padding: 8px 10px 8px 16px; }
+  .prompt-box { padding: 8px 10px 8px 16px; gap: 8px; }
+
+  .typewriter-title { padding: 0 4px; }
 
   .modal-card { max-width: 92vw; padding: 18px; }
 
@@ -1565,6 +1598,12 @@ header {
     padding: 10px 18px;
     font-size: 0.85rem;
   }
+}
+
+@media (max-width: 380px) {
+  .action-btn { width: 34px; height: 34px; }
+  .prompt-box { gap: 6px; padding: 8px 8px 8px 14px; }
+  .prompt-input { font-size: 0.92rem; }
 }
 
 /* ===== CHANGELOG MODAL (What's New) ===== */

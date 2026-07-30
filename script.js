@@ -432,6 +432,56 @@ function readFileAsImage(file) {
 }
 
 // ===== CODE BLOCK COMPONENT =====
+
+// Keyword sets per language. Previously these were applied with several
+// *sequential* regex passes over the same string (strings first, then
+// comments, then keywords). That's what caused the bug where you'd see
+// raw `class="hljs-keyword">def` text on screen: once the "string" pass
+// inserted `<span class="hljs-string">`, the later "keyword" pass for
+// the word "class" would match the word `class` *inside that attribute*
+// and wrap it again, producing broken/nested HTML the browser couldn't
+// parse as a tag — so it fell back to showing the tag text literally.
+//
+// Fix: tokenize each line in a SINGLE regex pass (comment | string | keyword),
+// so once a chunk of text is consumed as a string or comment, it can never
+// be re-matched and corrupted by the keyword branch afterward.
+const HLJS_KEYWORDS = {
+  javascript: ['function','return','const','let','var','if','else','for','while','class','import','export','new','this','typeof','instanceof','throw','switch','case','try','catch'],
+  html:       ['function','return','const','let','var','if','else','for','while','class','import','export','new','this','typeof','instanceof','throw','switch','case','try','catch'],
+  css:        ['function','return','const','let','var','if','else','for','while','class','import','export','new','this','typeof','instanceof','throw','switch','case','try','catch'],
+  python:     ['def','class','import','from','if','elif','else','for','while','return','try','except','with','as','lambda','yield']
+};
+
+function highlightLine(escapedLine, language) {
+  const keywords = HLJS_KEYWORDS[language] || [];
+  const kwSource = keywords.length ? `\\b(?:${keywords.join('|')})\\b` : '(?!x)x'; // never matches if no keywords for this language
+  const commentSource = language === 'python' ? '#.*' : '//.*';
+
+  const tokenRegex = new RegExp(
+    `(${commentSource})|((["'])(?:(?=(\\\\?))\\4.)*?\\3)|(${kwSource})`,
+    'g'
+  );
+
+  return escapedLine.replace(tokenRegex, (match, comment, str, _quote, _esc, kw) => {
+    if (comment) return `<span class="hljs-comment">${match}</span>`;
+    if (str) return `<span class="hljs-string">${match}</span>`;
+    if (kw) return `<span class="hljs-keyword">${match}</span>`;
+    return match;
+  });
+}
+
+function highlightCode(rawCode, language) {
+  let escaped = rawCode
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return escaped
+    .split('\n')
+    .map(line => highlightLine(line, language))
+    .join('\n');
+}
+
 function buildCodeBlock(language, rawCode) {
   const wrapper = document.createElement('div');
   wrapper.className = 'code-block-wrapper';
@@ -464,38 +514,9 @@ function buildCodeBlock(language, rawCode) {
 
   const pre = document.createElement('pre');
   const codeElem = document.createElement('code');
-  
-  let highlighted = rawCode;
-  highlighted = highlighted.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  
-  const lines = highlighted.split('\n');
-  const highlightedLines = lines.map(line => {
-    let l = line;
-    l = l.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, match => `<span class="hljs-string">${match}</span>`);
-    if (language === 'javascript' || language === 'html' || language === 'css') {
-      l = l.replace(/\/\/.*/, match => `<span class="hljs-comment">${match}</span>`);
-    }
-    if (language === 'python') {
-      l = l.replace(/#.*/, match => `<span class="hljs-comment">${match}</span>`);
-    }
-    const keywords = ['function', 'return', 'const', 'let', 'var', 'if', 'else', 'for', 'while', 'class', 'import', 'export', 'def', 'try', 'catch', 'new', 'this', 'typeof', 'instanceof', 'throw', 'switch', 'case'];
-    if (language === 'javascript' || language === 'html' || language === 'css') {
-      keywords.forEach(kw => {
-        const regex = new RegExp(`\\b${kw}\\b`, 'g');
-        l = l.replace(regex, match => `<span class="hljs-keyword">${match}</span>`);
-      });
-    }
-    if (language === 'python') {
-      const pyKeywords = ['def', 'class', 'import', 'from', 'if', 'elif', 'else', 'for', 'while', 'return', 'try', 'except', 'with', 'as', 'lambda', 'yield'];
-      pyKeywords.forEach(kw => {
-        const regex = new RegExp(`\\b${kw}\\b`, 'g');
-        l = l.replace(regex, match => `<span class="hljs-keyword">${match}</span>`);
-      });
-    }
-    return l;
-  });
-  
-  codeElem.innerHTML = highlightedLines.join('\n');
+
+  const highlighted = highlightCode(rawCode, language);
+  codeElem.innerHTML = highlighted;
   pre.appendChild(codeElem);
   body.appendChild(pre);
 
