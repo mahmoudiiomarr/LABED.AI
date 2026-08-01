@@ -1,5 +1,3 @@
-Hetha template mta3 README.md "Pro" bch y-charaf LEBED.ai 3al GitHub. Copi-i hetha, baddel chwaya el content e-li y-weti el version v0.25-beta mte3ek, w a3mel commit:
-
 LEBED.ai 🚀
 LEBED.ai is an AI-powered project designed to [kammel houni: 7ott el vision mte3ek, example: revolutionize user interaction / simplify complex tasks].
 
