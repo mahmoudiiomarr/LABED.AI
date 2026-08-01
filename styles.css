@@ -226,8 +226,17 @@ html, body {
 
 .app-layout {
   display: flex;
-  height: 100vh;
-  width: 100vw;
+  /* 100vh on mobile Safari/Chrome is measured against the viewport with
+     the address bar hidden, so the layout ends up taller than what's
+     actually visible — combined with overflow:hidden on <body>, the
+     bottom of the UI (the input box) becomes unreachable. Each line
+     below is only applied if the browser understands it; unsupported
+     units make the whole declaration invalid and get skipped, so the
+     last one a given browser understands wins. */
+  height: 100vh;                          /* old-browser fallback */
+  height: calc(var(--vh, 1vh) * 100);     /* JS-corrected fallback, see script.js */
+  height: 100dvh;                         /* modern browsers: real visible height */
+  width: 100%;
   position: relative;
   z-index: 1;
 }
@@ -865,7 +874,10 @@ body.light-mode .support-tab-btn.active {
 .user-name { font-size: 0.88rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .main-workspace {
-  flex: 1; display: flex; flex-direction: column; height: 100vh; position: relative;
+  flex: 1; display: flex; flex-direction: column; position: relative;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  height: 100dvh;
 }
 
 header {
@@ -1252,6 +1264,19 @@ header {
   background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
   border-radius: 10px; padding: 10px 14px; color: var(--text); font-family: var(--mono); font-size: 0.88rem; outline: none;
 }
+
+/* iOS Safari force-zooms the whole page on focus for any input/textarea
+   rendering text smaller than 16px — it ignores user-scalable=no for this
+   specific case. Below 768px we guarantee every text field is at least
+   16px so focusing an input never triggers that zoom. */
+@media (max-width: 768px) {
+  .form-input,
+  .prompt-input,
+  input[type="text"],
+  input[type="password"] {
+    font-size: 16px !important;
+  }
+}
 .form-input:focus { border-color: var(--primary); }
 
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
@@ -1305,8 +1330,54 @@ header {
   pointer-events: none;
 }
 
+/* ===== DRAG & DROP FILE OVERLAY ===== */
+.drop-zone-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(7, 7, 9, 0.72);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+.drop-zone-overlay.active {
+  display: flex;
+}
+
+.drop-zone-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 48px;
+  border: 2px dashed var(--primary);
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.drop-zone-message svg {
+  color: var(--primary);
+}
+
 /* ===== CODE BLOCK COMPONENT ===== */
+/* .bubble sets direction:rtl + unicode-bidi:plaintext so mixed Arabic/
+   French/English chat text auto-aligns correctly. That direction inherits
+   into anything nested inside it — including code blocks — which is what
+   was scrambling code alignment (indentation, punctuation, and line order
+   getting reshuffled by the bidi algorithm). Code must always be LTR
+   regardless of the language of the surrounding message, so we pin it
+   explicitly and isolate it from the parent's bidi context. */
 .code-block-wrapper {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
   margin: 12px 0;
   border-radius: 14px;
   overflow: hidden;
@@ -1461,7 +1532,10 @@ header {
   .sidebar {
     position: fixed !important;
     top: 0;
-    left: -280px; width: 280px !important;  height: 100vh;
+    left: -280px; width: 280px !important;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    height: 100dvh;
     z-index: 9999; transition: left 0.3s ease-in-out; box-shadow: 2px 0 20px rgba(0, 0, 0, 0.6); padding: 16px 12px !important;
   }
 
@@ -1603,7 +1677,8 @@ header {
 @media (max-width: 380px) {
   .action-btn { width: 34px; height: 34px; }
   .prompt-box { gap: 6px; padding: 8px 8px 8px 14px; }
-  .prompt-input { font-size: 0.92rem; }
+  /* font-size stays at 16px (set in the 768px breakpoint above) to avoid
+     iOS Safari's auto-zoom-on-focus behavior on small screens. */
 }
 
 /* ===== CHANGELOG MODAL (What's New) ===== */

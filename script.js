@@ -1,3 +1,18 @@
+// ===== MOBILE VIEWPORT HEIGHT FIX =====
+// iOS Safari (older than 15.4, e.g. what an iPhone 7 may still be running)
+// has no `dvh` unit support and calculates `100vh` against the viewport
+// with the address bar hidden, not the actually-visible screen. Mobile
+// Chrome (Samsung A36) has a lighter version of the same issue when the
+// URL bar shows/hides on scroll. We measure the real visible height in
+// JS and expose it as --vh, which styles.css uses as a fallback between
+// its 100vh and 100dvh declarations.
+function setViewportHeightVar() {
+  document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+}
+setViewportHeightVar();
+window.addEventListener('resize', setViewportHeightVar);
+window.addEventListener('orientationchange', () => setTimeout(setViewportHeightVar, 100));
+
 const fullText = "WELCOME TO LEBED.ai";
 const typewriterContainer = document.getElementById('typewriterContainer');
 
@@ -411,6 +426,70 @@ fileInput.addEventListener('change', (e) => {
   const files = Array.from(e.target.files);
   files.forEach(file => addFilePreview(file));
   fileInput.value = '';
+});
+
+// ===== DRAG & DROP FILE ATTACH =====
+const dropZoneOverlay = document.getElementById('dropZoneOverlay');
+// Browsers fire dragenter/dragleave on every element the cursor crosses,
+// including children, so a naive show-on-enter/hide-on-leave flickers as
+// the pointer moves over child elements. A depth counter that only hides
+// the overlay once it returns to 0 avoids that.
+let dragDepth = 0;
+
+function dragEventHasFiles(e) {
+  return e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+}
+
+window.addEventListener('dragenter', (e) => {
+  if (!dragEventHasFiles(e)) return;
+  e.preventDefault();
+  dragDepth++;
+  if (dropZoneOverlay) dropZoneOverlay.classList.add('active');
+});
+
+window.addEventListener('dragover', (e) => {
+  // preventDefault is required on dragover too, or the browser's default
+  // action (navigating to / opening the dropped file) takes over on drop.
+  if (!dragEventHasFiles(e)) return;
+  e.preventDefault();
+});
+
+window.addEventListener('dragleave', (e) => {
+  if (!dragEventHasFiles(e)) return;
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (dragDepth === 0 && dropZoneOverlay) dropZoneOverlay.classList.remove('active');
+});
+
+window.addEventListener('drop', (e) => {
+  if (!dragEventHasFiles(e)) return;
+  e.preventDefault();
+  dragDepth = 0;
+  if (dropZoneOverlay) dropZoneOverlay.classList.remove('active');
+  const files = Array.from(e.dataTransfer.files || []);
+  files.forEach(file => addFilePreview(file));
+});
+
+// ===== PASTE FILE ATTACH (Ctrl+V / Cmd+V) =====
+document.addEventListener('paste', (e) => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+
+  const pastedFiles = [];
+  for (const item of items) {
+    if (item.kind === 'file') {
+      const file = item.getAsFile();
+      if (file) pastedFiles.push(file);
+    }
+  }
+
+  // If there's no actual file in the clipboard (just plain text), do
+  // nothing and let the browser's normal paste-into-input behavior run.
+  if (pastedFiles.length === 0) return;
+
+  // A pasted file (e.g. a screenshot) has no meaningful bearing on normal
+  // text paste, so it's safe to always intercept once a file is present.
+  e.preventDefault();
+  pastedFiles.forEach(file => addFilePreview(file));
 });
 
 function readFileAsText(file) {
@@ -859,7 +938,7 @@ PERSONALITY & TONE:
 - Use emojis naturally throughout your replies (not just at the end) to add personality and emotion 😄🔥❤️.
 - Keep replies short and punchy by default — a few sentences, not essays. Only go longer if the user clearly needs detailed help (code, explanations, step-by-step stuff).
 - Be encouraging and supportive, always in the user's corner and rooting for them — but stay honest. A real best friend tells the truth and gives real advice, they don't just say what the user wants to hear.
-- LANGUAGE RULE (IMPORTANT): Detect the single main language/dialect the user is writing in (e.g. Tunisian Arabic in Latin letters "Tounsi", Arabic script, French, English) and reply ENTIRELY in that one language/style. Do NOT switch languages or alphabets mid-reply and do NOT mix Arabic-script words with English words in the same sentence — pick one language for the whole reply and stay consistent, only exception being code, brand names, or technical terms that don't translate.
+- LANGUAGE RULE (IMPORTANT): Detect the single main language/dialect the user is writing in (e.g. Tunisian Arabic in Latin letters "Tounsi", Arabic script, French, English) and reply ENTIRELY in that one language/style. Do NOT switch languages or alphabets mid-reply and do NOT mix Arabic-script words with English words in the same sentence — pick one language for the whole reply and stay consistent, only exception being code, brand names, or technical terms that don't translate. When writing in Arabic script, use plain straight quotation marks (") or Arabic guillemets (« ») instead of curly/typographic quotes (' ' " ") — mixing those into Arabic text is a known trigger for garbled output.
 
 ADDITIONAL CAPABILITIES:
 - You can analyze code files and provide feedback, improvements, and explanations.
@@ -869,9 +948,28 @@ ADDITIONAL CAPABILITIES:
 - Format your responses with proper markdown for code blocks using triple backticks.
 - Be helpful, clear, and true to the personality above.`;
     
+    // Conversation memory: turn this chat's stored message history into the
+    // {role, content} shape the API expects, and send all of it (not just
+    // the newest message) so the model has the full context of the chat.
+    // activeChat.messages already has the just-sent user message pushed
+    // onto it above, so mapping it in full covers everything up to and
+    // including this turn — no separate "add the current message" step
+    // needed, and no duplicate entries.
+    //
+    // Very long-running chats can eventually exceed the model's context
+    // window, so we cap how far back we send. Trimming from the *front*
+    // (oldest first) keeps the most recent, most relevant turns intact.
+    const MAX_HISTORY_MESSAGES = 20;
+    const historyMessages = (activeChat ? activeChat.messages : [userMsgObj])
+      .slice(-MAX_HISTORY_MESSAGES)
+      .map(m => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text
+      }));
+
     const messages = [
         { role: "system", content: systemPrompt },
-        { role: "user", content: userMessageText }
+        ...historyMessages
     ];
     
     try {
@@ -995,49 +1093,112 @@ if (micBtn && SpeechRecognitionAPI) {
   recognition.continuous = true;
   recognition.interimResults = true;
 
-  let isListening = false;
-  let baseText = '';
+  // Root causes of the old "cuts out / duplicates" bug:
+  // 1) Mobile browsers (and desktop Chrome after a few seconds of silence)
+  //    end the recognition session on their own even in continuous mode.
+  //    The old code re-read `userInput.value` as the new baseText on every
+  //    restart (onstart), including auto-restarts — if a restart fired
+  //    while a stray result from the dying session was still in flight,
+  //    both wrote to the field around the same time and you'd see text
+  //    duplicated or jumbled.
+  // 2) recognition.start() was called from two places (the click handler
+  //    and the onend auto-restart) with no guard between them, so a quick
+  //    double-trigger could call start() while a previous session was
+  //    still tearing down. Browsers throw InvalidStateError in that case;
+  //    it was being silently swallowed, which just killed listening with
+  //    no retry — the "cuts out unexpectedly" symptom.
+  //
+  // Fix: track the user's *intent* (wantsListening) separately from the
+  // engine's actual state (engineActive), accumulate only newly-finalized
+  // results once (via event.resultIndex) into a persistent committedText
+  // instead of re-deriving everything from the DOM, and guard restarts
+  // with a flag + small delay so start() is never called twice in a row.
+  let wantsListening = false;
+  let engineActive = false;
+  let restartPending = false;
+  let baseText = '';       // text already in the input before mic was turned on
+  let committedText = '';  // finalized transcript, persists across auto-restarts
+
+  function updateInputField(interimText) {
+    if (!userInput) return;
+    userInput.value = [baseText, committedText, interimText]
+      .filter(Boolean)
+      .join(' ')
+      .replace(/\s+/g, ' ');
+  }
 
   recognition.onstart = () => {
-    baseText = userInput && userInput.value ? userInput.value.trim() + ' ' : '';
+    engineActive = true;
+    restartPending = false;
   };
 
   recognition.onresult = (event) => {
-    let transcript = '';
-    for (let i = 0; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
+    let interimText = '';
+    // Only walk results from resultIndex onward — results before it were
+    // already processed (and, if final, already committed) in a previous
+    // call. Re-scanning from 0 every time is what let old/duplicate
+    // content get folded back in.
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      if (result.isFinal) {
+        committedText = (committedText + ' ' + result[0].transcript).trim();
+      } else {
+        interimText += result[0].transcript;
+      }
     }
-    if (userInput) userInput.value = baseText + transcript;
+    updateInputField(interimText);
   };
 
   recognition.onerror = (event) => {
     if (event.error === 'not-allowed' || event.error === 'audio-capture') {
-      isListening = false;
+      wantsListening = false;
       micBtn.classList.remove('listening');
       alert('Mic access is blocked. Allow microphone permission for this site in the browser settings.');
     }
+    // Other errors (e.g. 'no-speech', 'network') are left to onend, which
+    // always fires next and decides whether to restart. Restarting here
+    // too would double up with onend's restart.
   };
 
   recognition.onend = () => {
-    if (isListening) {
-      try { recognition.start(); } catch (err) {}
+    engineActive = false;
+    if (wantsListening && !restartPending) {
+      restartPending = true;
+      // Small delay avoids the InvalidStateError race described above —
+      // gives the previous session a moment to fully tear down before we
+      // ask the engine to start again.
+      setTimeout(() => {
+        restartPending = false;
+        if (!wantsListening) return;
+        try {
+          recognition.start();
+        } catch (err) {
+          wantsListening = false;
+          micBtn.classList.remove('listening');
+        }
+      }, 300);
     } else {
       micBtn.classList.remove('listening');
     }
   };
 
   micBtn.addEventListener('click', () => {
-    if (isListening) {
-      isListening = false;
-      recognition.stop();
+    if (wantsListening) {
+      wantsListening = false;
+      micBtn.classList.remove('listening');
+      if (engineActive) recognition.stop();
       return;
     }
+
+    baseText = (userInput && userInput.value.trim()) || '';
+    committedText = '';
+    wantsListening = true;
+    micBtn.classList.add('listening');
     try {
       recognition.start();
-      isListening = true;
-      micBtn.classList.add('listening');
     } catch (err) {
-      isListening = false;
+      wantsListening = false;
+      micBtn.classList.remove('listening');
     }
   });
 } else if (micBtn) {
@@ -1073,8 +1234,8 @@ if (themeToggle) {
   });
 }
 
-// ===== CHANGELOG MODAL (What's New in v0.2-beta) =====
-const CHANGELOG_VERSION = 'v0.2-beta';
+// ===== CHANGELOG MODAL (What's New in v0.25-beta) =====
+const CHANGELOG_VERSION = 'v0.25-beta';
 
 function initChangelogModal() {
   const modal = document.getElementById('changelogModal');

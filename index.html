@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
 <!-- 1. SEO Primary Meta Tags (L-Google) -->
-<title>LEBED.ai v0.2-beta — Founded By Omar Mahmoud</title>
-<meta name="title" content="LEBED.ai v0.2-beta — Founded By Omar Mahmoud">
-<meta name="description" content="LEBED.ai is a next-gen AI assistant powered by LEBED Core, founded by Omar Mahmoud. Chat, generate code, and solve complex problems seamlessly.">
-<meta name="keywords" content="LEBED, LEBED.ai, Omar Mahmoud, AI Tunisia, AI Chatbot, LEBED Core, Artificial Intelligence">
-<meta name="author" content="Omar Mahmoud">
+<title>LEBED.ai v0.25-beta — Founded By Omar Mahmoudi</title>
+<meta name="title" content="LEBED.ai v0.25-beta — Founded By Omar Mahmoudi">
+<meta name="description" content="LEBED.ai is a next-gen AI assistant powered by LEBED Core, founded by Omar Mahmoudi. Chat, generate code, and solve complex problems seamlessly.">
+<meta name="keywords" content="LEBED, LEBED.ai, Omar Mahmoudi, AI Tunisia, AI Chatbot, LEBED Core, Artificial Intelligence">
+<meta name="author" content="Omar Mahmoudi">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://lebedai.online/">
 
 <!-- 2. Open Graph / Facebook / WhatsApp -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lebedai.online/">
-<meta property="og:title" content="LEBED.ai v0.2-beta — Founded By Omar Mahmoud">
-<meta property="og:description" content="Next-gen AI interface powered by LEBED Core. Founded by Omar Mahmoud.">
+<meta property="og:title" content="LEBED.ai v0.25-beta — Founded By Omar Mahmoudi">
+<meta property="og:description" content="Next-gen AI interface powered by LEBED Core. Founded by Omar Mahmoudi.">
 <meta property="og:image" content="https://lebedai.online/logo%20pref.png">
 
 <!-- 3. Twitter Preview -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://lebedai.online/">
-<meta property="twitter:title" content="LEBED.ai v0.2-beta — Founded By Omar Mahmoud">
-<meta property="twitter:description" content="Next-gen AI interface powered by LEBED Core. Founded by Omar Mahmoud.">
+<meta property="twitter:title" content="LEBED.ai v0.25-beta — Founded By Omar Mahmoudi">
+<meta property="twitter:description" content="Next-gen AI interface powered by LEBED Core. Founded by Omar Mahmoudi.">
 <meta property="twitter:image" content="https://lebedai.online/logo%20pref.png">
 
 <!-- Fonts & Stylesheets -->
@@ -39,6 +37,13 @@
 <body>
 
 <canvas id="canvas-bg"></canvas>
+
+<div class="drop-zone-overlay" id="dropZoneOverlay">
+  <div class="drop-zone-message">
+    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    <span>Drop files to attach</span>
+  </div>
+</div>
 
 <div class="app-layout">
   
@@ -102,7 +107,7 @@
 
       <div class="status-badge">
         <span class="status-dot"></span>
-        <span>LEBED Core v0.2-beta</span>
+        <span>LEBED Core v0.25-beta</span>
       </div>
     </header>
 
@@ -125,7 +130,7 @@
 
     <div class="input-wrapper">
       <div class="prompt-box">
-        <input type="text" id="userInput" class="prompt-input" placeholder="Ask anything..." autocomplete="off">
+        <input type="text" id="userInput" class="prompt-input" placeholder="Ask anything..." autocomplete="off" dir="auto">
         
         <button class="action-btn file-btn" id="fileBtn" title="Upload files">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -147,7 +152,7 @@
         ⚠ No API key configured — click the <strong>⚙</strong> icon next to your profile (bottom-left) to add your endpoint, key, and model.
       </div>
       <div class="input-footer">
-        LEBED.ai v0.2-beta — Founded By Omar Mahmoudi
+        LEBED.ai v0.25-beta — Founded By Omar Mahmoudi
       </div>
     </div>
   </main>
@@ -273,7 +278,7 @@
 <div class="modal-overlay" id="changelogModal">
   <div class="modal-card changelog-modal-card">
     <div class="changelog-header">
-      <div class="changelog-title">🚀 What's New in LEBED.ai v0.2-beta</div>
+      <div class="changelog-title">🚀 What's New in LEBED.ai v0.25-beta</div>
       <p class="changelog-subtitle">We've made some big upgrades to improve your experience!</p>
     </div>
     <div class="modal-body changelog-body">
@@ -330,7 +335,7 @@
       </ul>
     </div>
     <div class="modal-footer changelog-footer">
-      <button class="btn btn-save changelog-btn" id="changelogCloseBtn">Explore v0.2-beta 🚀</button>
+      <button class="btn btn-save changelog-btn" id="changelogCloseBtn">Explore v0.25-beta 🚀</button>
     </div>
   </div>
 </div>
