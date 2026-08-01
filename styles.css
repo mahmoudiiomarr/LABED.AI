@@ -222,6 +222,22 @@ html, body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* Hard ceiling on the visible box size. Some Android in-app WebViews
+     (Instagram/Facebook, worse on Samsung) don't reliably clip a
+     position:fixed element's overflow via an ancestor's overflow-x:hidden,
+     so if canvas.width/height (set in JS from window/document metrics)
+     is ever briefly larger than the true visible viewport, this CSS-level
+     clamp stops that extra width/height from leaking through and shifting
+     the rest of the UI off-screen. --vw/--vh are the JS-corrected values
+     from script.js; the vw/vh fallbacks cover the instant before that JS
+     first runs. */
+  width: 100vw;
+  width: calc(var(--vw, 1vw) * 100);
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .app-layout {
@@ -237,8 +253,19 @@ html, body {
   height: calc(var(--vh, 1vh) * 100);     /* JS-corrected fallback, see script.js */
   height: 100dvh;                         /* modern browsers: real visible height */
   width: 100%;
+  max-width: 100vw;
+  max-width: calc(var(--vw, 1vw) * 100);
   position: relative;
   z-index: 1;
+  overflow-x: hidden;
+}
+
+.main-workspace {
+  overflow-x: hidden;
+}
+
+header {
+  overflow: hidden;
 }
 
 .sidebar, .card, .modal-card, .prompt-box {

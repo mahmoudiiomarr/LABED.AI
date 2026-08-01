@@ -6,12 +6,43 @@
 // URL bar shows/hides on scroll. We measure the real visible height in
 // JS and expose it as --vh, which styles.css uses as a fallback between
 // its 100vh and 100dvh declarations.
-function setViewportHeightVar() {
-  document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+// ===== MOBILE VIEWPORT WIDTH FIX =====
+// Companion bug to the height one above, seen specifically inside Android
+// in-app browsers (Instagram/Facebook WebViews, worse on Samsung): the
+// browser can report/settle on a rendered width slightly wider than what's
+// actually visible on screen, especially right after the page's own JS
+// finishes reflowing content (like the typewriter effect below, or the
+// canvas resize). Because the offending width often ends up on a
+// position:fixed element (like #canvas-bg, sized from window.innerWidth),
+// it isn't always reliably clipped by an ancestor's overflow-x:hidden in
+// these embedded WebView builds, so the extra width leaks through and the
+// rightmost slice of the real UI gets cut off in the visible viewport.
+//
+// document.documentElement.clientWidth/clientHeight is the actual laid-out
+// viewport size (post any internal chrome/scrollbar accounting) and is
+// more trustworthy here than window.innerWidth/innerHeight, so we use it
+// both for the --vw custom property and for sizing the canvas below.
+function setViewportWidthVar() {
+  document.documentElement.style.setProperty('--vw', (document.documentElement.clientWidth * 0.01) + 'px');
 }
-setViewportHeightVar();
-window.addEventListener('resize', setViewportHeightVar);
-window.addEventListener('orientationchange', () => setTimeout(setViewportHeightVar, 100));
+function setViewportHeightVar() {
+  document.documentElement.style.setProperty('--vh', (document.documentElement.clientHeight * 0.01) + 'px');
+}
+function refreshViewportVars() {
+  setViewportWidthVar();
+  setViewportHeightVar();
+}
+refreshViewportVars();
+window.addEventListener('resize', refreshViewportVars);
+window.addEventListener('orientationchange', () => setTimeout(refreshViewportVars, 100));
+// In-app browsers (Instagram/Facebook especially) sometimes settle their
+// real layout size slightly *after* load/resize have already fired, e.g.
+// once their own chrome finishes animating in. pageshow/visibilitychange
+// catch that late settle without needing a real resize event.
+window.addEventListener('pageshow', () => setTimeout(refreshViewportVars, 50));
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') setTimeout(refreshViewportVars, 50);
+});
 
 const fullText = "WELCOME TO LEBED.ai";
 const typewriterContainer = document.getElementById('typewriterContainer');
@@ -97,8 +128,13 @@ setTimeout(smoothTypeStep, 400);
 const canvas = document.getElementById('canvas-bg');
 const ctx = canvas.getContext('2d');
 let particles = [];
-function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+function resizeCanvas() { canvas.width = document.documentElement.clientWidth; canvas.height = document.documentElement.clientHeight; }
 window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 100));
+window.addEventListener('pageshow', () => setTimeout(resizeCanvas, 50));
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') setTimeout(resizeCanvas, 50);
+});
 resizeCanvas();
 
 class Particle {
