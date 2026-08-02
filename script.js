@@ -248,7 +248,7 @@ document.getElementById('saveProfileBtn').addEventListener('click', () => {
 // GitHub history, so it may already be flagged/rotated by Groq at some point.
 const defaultApiConfig = {
   endpoint: 'https://api.groq.com/openai/v1/chat/completions',
-  key: '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',
+  key: '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',
   model: 'llama-3.3-70b-versatile'
 };
 let apiConfig = {
