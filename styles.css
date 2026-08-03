@@ -6,10 +6,29 @@
   --primary: #FF6B00;
   --primary-light: #FF8833;
   --primary-glow: rgba(255, 107, 0, 0.35);
+  --accent-color: #FF6B00;
+  --accent-light: #FF8833;
+  --accent-glow: rgba(255, 107, 0, 0.35);
+  --accent-soft: rgba(255, 107, 0, 0.08);
+  --accent-bg: rgba(255, 107, 0, 0.12);
+  --accent-border: rgba(255, 107, 0, 0.15);
+  --accent-border-strong: rgba(255, 107, 0, 0.3);
+  --accent-border-hover: rgba(255, 107, 0, 0.35);
+  --focus-glow: rgba(255, 107, 0, 0.15);
+  --user-bubble-bg: rgba(255, 107, 0, 0.12);
+  --user-bubble-border: rgba(255, 107, 0, 0.3);
+  --active-item-bg: rgba(255, 107, 0, 0.15);
+  --active-item-border: rgba(255, 107, 0, 0.3);
+  --hover-bg: rgba(255, 107, 0, 0.08);
+  --promo-bg: rgba(255, 107, 0, 0.05);
   --text: #F4F4F6;
   --muted: #8E8E96;
   --danger: #FF4D4D;
   --success: #00C853;
+  --logo-color: #FF6B00;
+  --button-bg: var(--accent-color);
+  --button-bg-hover: rgba(255, 107, 0, 0.12);
+  --border-color: var(--accent-border);
   --mono: 'JetBrains Mono', monospace;
   --display: 'Space Grotesk', sans-serif;
   --body: 'Inter', sans-serif;
@@ -21,7 +40,12 @@
   --code-header-bg: #18181e;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
 /* ============================================================
    LIGHT MODE — premium off-white / glassmorphism palette
@@ -41,6 +65,20 @@ body.light-mode {
   --primary-light: #FF9433;
   --primary-glow: rgba(255, 111, 0, 0.28);
   --primary-soft: rgba(255, 111, 0, 0.08); /* subtle highlight fill */
+  --accent-color: #FF6F00;
+  --accent-light: #FF9433;
+  --accent-glow: rgba(255, 111, 0, 0.28);
+  --accent-soft: rgba(255, 111, 0, 0.08);
+  --accent-bg: rgba(255, 111, 0, 0.08);
+  --accent-border: rgba(255, 111, 0, 0.22);
+  --accent-border-hover: rgba(255, 111, 0, 0.22);
+  --focus-glow: rgba(255, 111, 0, 0.18);
+  --user-bubble-bg: rgba(255, 111, 0, 0.12);
+  --user-bubble-border: rgba(255, 111, 0, 0.3);
+  --active-item-bg: rgba(255, 111, 0, 0.15);
+  --active-item-border: rgba(255, 111, 0, 0.22);
+  --hover-bg: rgba(255, 111, 0, 0.08);
+  --promo-bg: rgba(255, 111, 0, 0.05);
   --glass-bg: rgba(255, 255, 255, 0.68);
   --glass-blur: blur(18px);
   --border-glow: rgba(255, 111, 0, 0.32);
@@ -75,8 +113,8 @@ body.light-mode .msg-row.ai .bubble {
 }
 
 body.light-mode .msg-row.user .bubble {
-  background: var(--primary-soft);
-  border-color: rgba(255, 111, 0, 0.22);
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
 }
 
 body.light-mode .hero-greeting p {
@@ -91,22 +129,40 @@ body.light-mode .code-lang {
 
 /* Buttons: orange fill with a soft glow instead of a hard edge.
    New Chat keeps dark text per request; Save keeps white text. */
-body.light-mode .new-chat-btn,
 body.light-mode .btn-save {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   border-color: transparent !important;
   box-shadow: var(--shadow-sm), 0 0 16px var(--primary-glow);
-}
-
-body.light-mode .new-chat-btn {
-  color: #14141A;
-}
-
-body.light-mode .btn-save {
   color: #FFFFFF;
 }
 
-body.light-mode .new-chat-btn:hover,
+/* New Chat: neutral light surface with high-contrast, near-black text —
+   the accent color is reserved for the hover state so the resting button
+   never reads as low-contrast orange-on-orange. */
+body.light-mode .new-chat-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(20, 20, 30, 0.1) !important;
+  color: #14141A;
+  box-shadow: var(--shadow-sm);
+}
+
+body.light-mode .new-chat-btn .shortcut-tag {
+  background: rgba(20, 20, 30, 0.06);
+  color: #46464E;
+}
+
+body.light-mode .new-chat-btn:hover {
+  background: var(--primary) !important;
+  border-color: transparent !important;
+  color: #FFFFFF;
+  box-shadow: var(--shadow-md), 0 0 20px var(--primary-glow);
+}
+
+body.light-mode .new-chat-btn:hover .shortcut-tag {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
 body.light-mode .btn-save:hover {
   box-shadow: var(--shadow-md), 0 0 24px var(--primary-glow);
 }
@@ -117,8 +173,8 @@ body.light-mode .support-btn:hover {
 }
 
 body.light-mode .history-item.active {
-  background: var(--primary-soft);
-  border-color: rgba(255, 111, 0, 0.22);
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
   box-shadow: var(--shadow-sm);
 }
 
@@ -342,7 +398,8 @@ aside.sidebar.collapsed .new-chat-btn span,
 aside.sidebar.collapsed .support-btn span,
 aside.sidebar.collapsed .history-title,
 aside.sidebar.collapsed .user-name,
-aside.sidebar.collapsed .shortcut-tag {
+aside.sidebar.collapsed .shortcut-tag,
+aside.sidebar.collapsed .cooldown-timer {
   display: none;
 }
 
@@ -504,15 +561,15 @@ body.light-mode .hero-badge {
 .version-badge {
   font-family: var(--mono);
   font-size: 0.65rem;
-  background: rgba(255, 107, 0, 0.12);
+  background: var(--promo-bg);
   border: 1px solid var(--card-border);
-  color: var(--primary-light);
+  color: var(--accent-light);
   padding: 2px 6px;
   border-radius: 6px;
 }
 
 .new-chat-btn {
-  background: rgba(255, 107, 0, 0.12);
+  background: var(--accent-bg);
   border: 1px solid var(--card-border);
   color: var(--text);
   padding: 10px 14px;
@@ -533,6 +590,21 @@ body.light-mode .hero-badge {
   box-shadow: 0 0 18px var(--primary-glow);
 }
 
+/* 5s spam-protection cooldown (applied via JS in script.js) */
+.new-chat-btn:disabled,
+.new-chat-btn.cooldown {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cooldown-timer {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text);
+  opacity: 0.8;
+}
+
 .shortcut-tag {
   font-family: var(--mono);
   font-size: 0.65rem;
@@ -542,7 +614,7 @@ body.light-mode .hero-badge {
 }
 
 .support-btn {
-  background: rgba(255, 107, 0, 0.06);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--card-border);
   color: var(--muted);
   padding: 10px 14px;
@@ -559,10 +631,10 @@ body.light-mode .hero-badge {
 }
 
 .support-btn:hover {
-  color: var(--primary-light);
-  border-color: var(--primary);
-  background: rgba(255, 107, 0, 0.1);
-  box-shadow: 0 0 14px var(--primary-glow);
+  color: var(--accent-light);
+  border-color: var(--accent-color);
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 14px var(--accent-glow);
 }
 
 .support-btn svg { flex-shrink: 0; }
@@ -713,8 +785,8 @@ body.light-mode .hero-badge {
 }
 
 .payment-row:hover {
-  border-color: rgba(255, 107, 0, 0.35);
-  box-shadow: 0 0 14px rgba(255, 107, 0, 0.08);
+  border-color: var(--accent-border-hover);
+  box-shadow: 0 0 14px var(--accent-soft);
 }
 
 .payment-info {
@@ -744,9 +816,9 @@ body.light-mode .hero-badge {
 
 .copy-payment-btn {
   flex-shrink: 0;
-  background: rgba(255, 107, 0, 0.1);
+  background: var(--accent-bg);
   border: 1px solid var(--card-border);
-  color: var(--primary-light);
+  color: var(--accent-light);
   font-family: var(--body);
   font-size: 0.78rem;
   font-weight: 600;
@@ -787,6 +859,54 @@ body.light-mode .kofi-btn {
 
 body.light-mode .support-tab-btn.active {
   color: #ffffff;
+}
+
+.chat-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 8px 12px 8px;
+}
+
+.chat-search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.chat-search-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 8px 10px 8px 32px;
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-search-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px var(--focus-glow);
+}
+
+.chat-search-input::placeholder { color: var(--muted); }
+
+aside.sidebar.collapsed .chat-search-wrapper { display: none; }
+
+.history-empty {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+body.light-mode .chat-search-input {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
 }
 
 .recents-header {
@@ -840,14 +960,26 @@ body.light-mode .support-tab-btn.active {
   transition: all 0.2s ease;
 }
 
-.history-item.active {
-  background: rgba(255, 107, 0, 0.15);
-  border: 1px solid rgba(255, 107, 0, 0.3);
+..history-item.active {
+  background: var(--active-item-bg);
+  border: 1px solid var(--active-item-border);
   color: #FFF;
 }
 
-.history-item:hover:not(.active) { color: var(--text); background: rgba(255, 107, 0, 0.08); }
+.history-item.pinned {
+  border: 1px solid rgba(255, 107, 0, 0.18);
+}
+
+.history-item:hover:not(.active) { color: var(--text); background: var(--hover-bg); }
 .history-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; margin-right: 6px; }
+
+.pin-indicator {
+  display: flex;
+  align-items: center;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-right: 4px;
+}
 
 .item-menu-btn {
   opacity: 0; background: transparent; border: none; color: var(--muted);
@@ -869,11 +1001,25 @@ body.light-mode .support-tab-btn.active {
 .dropdown-opt {
   background: transparent; border: none; color: var(--text); padding: 6px 10px;
   font-size: 0.78rem; border-radius: 6px; display: flex; align-items: center; gap: 8px;
-  cursor: pointer; width: 100%;
+  cursor: pointer; width: 100%; white-space: nowrap;
 }
 
+.dropdown-opt svg { flex-shrink: 0; }
+
 .dropdown-opt:hover { background: rgba(255,255,255,0.06); }
-.dropdown-opt.delete:hover { background: rgba(255, 77, 77, 0.15); color: var(--danger); }
+
+/* Soft alert-red by default (not just on hover) so Delete visually reads
+   as a distinct, cautionary action at a glance — full red on hover. */
+.dropdown-opt.delete {
+  color: rgba(255, 77, 77, 0.75);
+}
+.dropdown-opt.delete:hover {
+  background: rgba(255, 77, 77, 0.12);
+  color: var(--danger);
+}
+
+body.light-mode .dropdown-menu { color: var(--text); }
+body.light-mode .dropdown-opt:hover { background: rgba(20, 20, 30, 0.05); }
 
 .user-profile {
   display: flex;
@@ -887,7 +1033,7 @@ body.light-mode .support-tab-btn.active {
   transition: background 0.2s;
 }
 
-.user-profile:hover { background: rgba(255, 107, 0, 0.08); }
+.user-profile:hover { background: var(--hover-bg); }
 .user-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
 
 .user-avatar {
@@ -909,7 +1055,8 @@ body.light-mode .support-tab-btn.active {
 
 header {
   height: 60px; display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; border-bottom: 1px solid rgba(255,107,0,0.05);
+  padding: 0 24px; border-bottom: 1px solid var(--promo-bg);
+  transition: border-color 0.25s ease;
 }
 
 .header-actions { 
@@ -919,14 +1066,225 @@ header {
 }
 
 .status-badge {
-  font-family: var(--mono); font-size: 0.72rem; color: var(--primary-light);
-  background: rgba(255, 107, 0, 0.08); border: 1px solid var(--card-border);
+  font-family: var(--mono); font-size: 0.72rem; color: var(--accent-light);
+  background: var(--accent-soft); border: 1px solid var(--card-border);
   padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 8px;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+/* ===== CODEC MODE ===== */
+
+/* ===== CODEC MODE POWER-UP ANIMATION ===== */
+/* Full-screen overlay triggered once, right when Codec Mode turns ON,
+   synced with the existing codecst.mp3 sound cue. Pure CSS animation,
+   the JS just appends/removes this node — no layout impact otherwise. */
+.codec-powerup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.codec-powerup-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 200, 255, 0.35) 0%, rgba(0, 200, 255, 0.08) 40%, rgba(0, 200, 255, 0) 70%);
+  animation: codecFlashPulse 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.codec-powerup-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #00C8FF;
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.6), inset 0 0 20px rgba(0, 200, 255, 0.4);
+  animation: codecRingExpand 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.codec-powerup-ring-2 {
+  animation-delay: 0.12s;
+  border-color: #5AD7FF;
+}
+
+@keyframes codecRingExpand {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    border-width: 4px;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    width: min(1400px, 220vw);
+    height: min(1400px, 220vw);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+@keyframes codecFlashPulse {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .codec-powerup-overlay { display: none; }
+}
+
+.chat-mode-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.codec-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.codec-toggle-btn:hover {
+  color: var(--text);
+  border-color: rgba(0, 200, 255, 0.35);
+}
+
+.codec-toggle-btn.active {
+  background: rgba(0, 200, 255, 0.12);
+  border-color: rgba(0, 200, 255, 0.4);
+  color: #00C8FF;
+  box-shadow: 0 0 12px rgba(0, 200, 255, 0.2);
+}
+
+/* Header + status badge shift to a distinct blue accent while Codec Mode
+   is on, so it's obvious at a glance which persona is currently active. */
+header.codec-active {
+  border-bottom-color: rgba(0, 200, 255, 0.18);
+}
+
+.status-badge.codec-active {
+  background: rgba(0, 200, 255, 0.1);
+  border-color: rgba(0, 200, 255, 0.3);
+  color: #00C8FF;
+}
+
+.status-badge.codec-active .status-dot {
+  background: #00C8FF;
+  box-shadow: 0 0 10px #00C8FF;
+}
+
+body.light-mode .codec-toggle-btn {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
+}
+
+body.light-mode .codec-toggle-btn.active {
+  background: rgba(0, 160, 220, 0.1);
+  color: #0090C8;
+  border-color: rgba(0, 160, 220, 0.35);
+}
+
+body.light-mode .status-badge.codec-active {
+  background: rgba(0, 160, 220, 0.08);
+  color: #0090C8;
+  border-color: rgba(0, 160, 220, 0.3);
+}
+
+body.light-mode .status-badge.codec-active .status-dot {
+  background: #0090C8;
+  box-shadow: 0 0 8px #0090C8;
+}
+
+/* Codec theme overrides for blue theme mode */
+.codec-theme {
+  --bg: #041C2F;
+  --sidebar-bg: #071927;
+  --card: rgba(8, 24, 43, 0.82);
+  --card-border: rgba(0, 171, 255, 0.18);
+  --primary: #00C8FF;
+  --primary-light: #5AD7FF;
+  --primary-glow: rgba(0, 200, 255, 0.35);
+  --primary-soft: rgba(0, 200, 255, 0.10);
+  --accent-color: #00C8FF;
+  --accent-light: #5AD7FF;
+  --accent-glow: rgba(0, 200, 255, 0.35);
+  --accent-soft: rgba(0, 200, 255, 0.10);
+  --accent-bg: rgba(0, 200, 255, 0.12);
+  --accent-border: rgba(0, 200, 255, 0.15);
+  --accent-border-strong: rgba(0, 200, 255, 0.3);
+  --accent-border-hover: rgba(0, 200, 255, 0.35);
+  --focus-glow: rgba(0, 200, 255, 0.25);
+  --user-bubble-bg: rgba(0, 200, 255, 0.12);
+  --user-bubble-border: rgba(0, 200, 255, 0.3);
+  --active-item-bg: rgba(0, 200, 255, 0.15);
+  --active-item-border: rgba(0, 200, 255, 0.3);
+  --hover-bg: rgba(0, 200, 255, 0.08);
+  --promo-bg: rgba(0, 200, 255, 0.05);
+  --text: #F4FBFF;
+  --muted: #A4D8FF;
+  --border-glow: rgba(0, 200, 255, 0.25);
+  --code-bg: #0C1D2D;
+  --code-border: #17415D;
+  --code-header-bg: #102B3F;
+}
+
+.codec-theme body.light-mode {
+  --bg: #E9F7FF;
+  --sidebar-bg: rgba(255, 255, 255, 0.92);
+  --card: rgba(255, 255, 255, 0.86);
+  --card-border: rgba(0, 152, 219, 0.16);
+  --primary: #009CE6;
+  --primary-light: #4AC3FF;
+  --primary-glow: rgba(0, 156, 230, 0.24);
+  --primary-soft: rgba(0, 156, 230, 0.09);
+  --accent-color: #009CE6;
+  --accent-light: #4AC3FF;
+  --accent-glow: rgba(0, 156, 230, 0.24);
+  --accent-soft: rgba(0, 156, 230, 0.09);
+  --accent-bg: rgba(0, 156, 230, 0.08);
+  --accent-border: rgba(0, 156, 230, 0.14);
+  --accent-border-strong: rgba(0, 156, 230, 0.28);
+  --accent-border-hover: rgba(0, 156, 230, 0.35);
+  --focus-glow: rgba(0, 156, 230, 0.18);
+  --user-bubble-bg: rgba(0, 156, 230, 0.1);
+  --user-bubble-border: rgba(0, 156, 230, 0.3);
+  --active-item-bg: rgba(0, 156, 230, 0.14);
+  --active-item-border: rgba(0, 156, 230, 0.28);
+  --hover-bg: rgba(0, 156, 230, 0.06);
+  --promo-bg: rgba(0, 156, 230, 0.04);
+  --text: #111F2B;
+  --muted: #5A7C98;
+  --border-glow: rgba(0, 156, 230, 0.22);
+  --code-bg: #F1F8FF;
+  --code-border: rgba(0, 92, 132, 0.12);
+  --code-header-bg: #E2F3FF;
+}
+
+
+@media (max-width: 768px) {
+  .chat-mode-row { margin-bottom: 6px; }
 }
 
 .status-dot {
-  width: 6px; height: 6px; background: var(--primary); border-radius: 50%;
-  box-shadow: 0 0 10px var(--primary); animation: blink 1.8s infinite;
+  width: 6px; height: 6px; background: var(--accent-color); border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-color); animation: blink 1.8s infinite;
 }
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -1057,6 +1415,38 @@ header {
 .msg-content { display: flex; flex-direction: column; gap: 4px; }
 .user .msg-content { align-items: flex-end; }
 
+/* ===== IN-CHAT IMAGE THUMBNAILS ===== */
+/* Uploaded images now render as real thumbnails (pulled from IndexedDB)
+   above the text bubble, instead of just a "[Image attached]" text note. */
+.msg-image-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.msg-image-thumb {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.msg-image-thumb:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 14px var(--accent-glow);
+}
+
+@media (max-width: 768px) {
+  .msg-image-thumb {
+    width: 110px;
+    height: 110px;
+  }
+}
+
 .bubble { 
   padding: 14px 18px; 
   border-radius: 16px; 
@@ -1071,17 +1461,27 @@ header {
   text-align: start;
 }
 
-.user .bubble { background: rgba(255, 107, 0, 0.12); border: 1px solid rgba(255, 107, 0, 0.3); border-top-right-radius: 4px; }
+.user .bubble { background: var(--user-bubble-bg); border: 1px solid var(--user-bubble-border); border-top-right-radius: 4px; }
 .ai .bubble { background: var(--card); border: 1px solid var(--card-border); border-top-left-radius: 4px; }
+
+/* Image-only messages (no typed text) shouldn't show an empty bubble
+   box floating above/below the thumbnail — just the image itself. */
+.bubble:empty {
+  display: none;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
 
 .msg-toolbar { display: flex; align-items: center; gap: 8px; opacity: 0; transition: opacity 0.2s; margin-top: 2px; }
 .msg-row:hover .msg-toolbar { opacity: 1; }
 
 .tool-btn {
   background: transparent; border: none; color: var(--muted); cursor: pointer;
-  font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 4px;
+  font-size: 0.75rem; padding: 4px 6px; border-radius: 4px; display: flex; align-items: center; gap: 4px;
 }
 .tool-btn:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+.tool-btn.delete:hover { color: var(--danger); background: rgba(255, 77, 77, 0.12); }
 
 .timestamp { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); }
 
@@ -1094,8 +1494,8 @@ header {
 }
 
 .prompt-box:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 15px rgba(255, 107, 0, 0.15);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 15px var(--focus-glow);
 }
 
 .prompt-input {
@@ -1104,13 +1504,22 @@ header {
 }
 
 .action-btn {
-  background: var(--primary); color: #070709; border: none;
+  background: var(--accent-color); color: #070709; border: none;
   width: 38px; height: 38px; border-radius: 50%; display: flex;
   align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.action-btn:hover { box-shadow: 0 0 12px var(--primary-glow); }
+.action-btn:hover { box-shadow: 0 0 12px var(--accent-glow); }
 .action-btn:active { transform: scale(0.92); }
+
+/* Micro-interaction: brief glow + squeeze-release pulse when a message
+   is sent, so the send button feels responsive rather than static. */
+@keyframes sendPulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-glow); transform: scale(1); }
+  35%  { box-shadow: 0 0 22px var(--accent-glow); transform: scale(0.88); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); transform: scale(1); }
+}
+.action-btn.sent { animation: sendPulse 0.45s ease-out; }
 
 .mic-btn {
   background: rgba(255,255,255,0.06);
@@ -1767,7 +2176,7 @@ header {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background: rgba(255, 107, 0, 0.05);
+  background: var(--promo-bg);
   border: 1px solid var(--card-border);
   border-radius: 14px;
   padding: 12px 14px;
@@ -1775,8 +2184,8 @@ header {
 }
 
 .changelog-list li:hover {
-  border-color: rgba(255, 107, 0, 0.3);
-  background: rgba(255, 107, 0, 0.08);
+  border-color: var(--accent-border-strong);
+  background: var(--hover-bg);
   transform: translateX(2px);
 }
 
@@ -1804,6 +2213,15 @@ header {
   font-size: 0.82rem;
   color: var(--muted);
   line-height: 1.45;
+}
+
+.changelog-outro {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  text-align: center;
+  padding-top: 6px;
+  font-style: italic;
 }
 
 .changelog-footer {

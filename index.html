@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
 <!-- 1. SEO Primary Meta Tags (L-Google) -->
-<title>LEBED.ai v0.25-beta — Founded By Omar Mahmoudi</title>
-<meta name="title" content="LEBED.ai v0.25-beta — Founded By Omar Mahmoudi">
+<title>LEBED.ai v0.3-beta — Founded By Omar Mahmoudi</title>
+<meta name="title" content="LEBED.ai v0.3-beta — Founded By Omar Mahmoudi">
 <meta name="description" content="LEBED.ai is a next-gen AI assistant powered by LEBED Core, founded by Omar Mahmoudi. Chat, generate code, and solve complex problems seamlessly.">
 <meta name="keywords" content="LEBED, LEBED.ai, Omar Mahmoudi, AI Tunisia, AI Chatbot, LEBED Core, Artificial Intelligence">
 <meta name="author" content="Omar Mahmoudi">
@@ -17,14 +17,14 @@
 <!-- 2. Open Graph / Facebook / WhatsApp -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lebedai.online/">
-<meta property="og:title" content="LEBED.ai v0.25-beta — Founded By Omar Mahmoudi">
+<meta property="og:title" content="LEBED.ai v0.3-beta — Founded By Omar Mahmoudi">
 <meta property="og:description" content="Next-gen AI interface powered by LEBED Core. Founded by Omar Mahmoudi.">
 <meta property="og:image" content="https://lebedai.online/logo%20pref.png">
 
 <!-- 3. Twitter Preview -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://lebedai.online/">
-<meta property="twitter:title" content="LEBED.ai v0.25-beta — Founded By Omar Mahmoudi">
+<meta property="twitter:title" content="LEBED.ai v0.3-beta — Founded By Omar Mahmoudi">
 <meta property="twitter:description" content="Next-gen AI interface powered by LEBED Core. Founded by Omar Mahmoudi.">
 <meta property="twitter:image" content="https://lebedai.online/logo%20pref.png">
 
@@ -32,7 +32,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700&family=Press+Start+2P&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" type="image/png" href="logo pref.png">
+<link rel="icon" type="image/png" href="logo-orange.png">
+
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FF6B00">
+<link rel="apple-touch-icon" href="logo-orange.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LEBED.ai">
 </head>
 <body>
 
@@ -51,7 +59,7 @@
     <div class="sidebar-header">
       <div class="brand">
         <div class="logo-core">
-          <img src="logo pref.png" alt="LEBED.ai" class="pixel-logo">
+          <img src="logo-orange.png" alt="LEBED.ai" class="pixel-logo dynamic-logo" data-logo-default="logo-orange.png" data-logo-codec="logo-blue.png">
         </div>
         <div class="brand-title">LEBED<span>.ai</span></div>
       </div>
@@ -61,6 +69,7 @@
       <div style="display: flex; align-items: center; gap: 8px;">
         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
         <span>New chat</span>
+        <span class="cooldown-timer" id="newChatTimer"></span>
       </div>
       <span class="shortcut-tag">Ctrl+Shift+O</span>
     </button>
@@ -71,6 +80,11 @@
         <span>Support Us</span>
       </div>
     </button>
+
+    <div class="chat-search-wrapper">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="chat-search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="chatSearchInput" class="chat-search-input" placeholder="Search chats..." autocomplete="off">
+    </div>
 
     <div class="recents-header">
       <span class="recents-title">Recents</span>
@@ -96,7 +110,7 @@
         </button>
         <!-- Navbar Logo (small) -->
         <div class="navbar-brand">
-          <img src="logo pref.png" alt="LEBED.ai" class="navbar-logo">
+          <img src="logo-orange.png" alt="LEBED.ai" class="navbar-logo dynamic-logo" data-logo-default="logo-orange.png" data-logo-codec="logo-blue.png">
           <span class="navbar-title">LEBED<span>.ai</span></span>
         </div>
         <button id="themeToggle" title="Toggle dark / light mode" style="background:none; border:none; color:var(--muted); cursor:pointer; padding: 4px; display: flex; align-items: center; justify-content: center;">
@@ -105,9 +119,9 @@
         </button>
       </div>
 
-      <div class="status-badge">
+      <div class="status-badge" id="statusBadge">
         <span class="status-dot"></span>
-        <span>LEBED Core v0.25-beta</span>
+        <span id="statusBadgeText">LEBED Core v0.3-beta</span>
       </div>
     </header>
 
@@ -116,19 +130,25 @@
         <div class="hero-greeting" id="heroGreeting">
           <!-- Hero Logo -->
           <div class="hero-logo-container">
-            <img src="logo pref.png" alt="LEBED.ai" class="hero-logo">
+            <img src="logo-orange.png" alt="LEBED.ai" class="hero-logo dynamic-logo" data-logo-default="logo-orange.png" data-logo-codec="logo-blue.png">
             <div class="hero-badge">AI Powered</div>
           </div>
           <div class="typewriter-title">
             <div id="typewriterContainer"></div><span class="cursor"></span>
           </div>
-          <p>How can I assist you :D</p>
+          <p>How may I support your next AI workflow?</p>
         </div>
         <div class="message-list" id="messageList"></div>
       </div>
     </div>
 
     <div class="input-wrapper">
+      <div class="chat-mode-row">
+        <button id="codecToggleBtn" class="codec-toggle-btn" title="Codec Mode — Senior Coding Assistant persona for this chat">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span>Codec</span>
+        </button>
+      </div>
       <div class="prompt-box">
         <input type="text" id="userInput" class="prompt-input" placeholder="Ask anything..." autocomplete="off" dir="auto">
         
@@ -152,7 +172,7 @@
         ⚠ No API key configured — click the <strong>⚙</strong> icon next to your profile (bottom-left) to add your endpoint, key, and model.
       </div>
       <div class="input-footer">
-        LEBED.ai v0.25-beta — Founded By Omar Mahmoudi
+        LEBED.ai v0.3-beta — Founded By Omar Mahmoudi
       </div>
     </div>
   </main>
@@ -278,64 +298,51 @@
 <div class="modal-overlay" id="changelogModal">
   <div class="modal-card changelog-modal-card">
     <div class="changelog-header">
-      <div class="changelog-title">🚀 What's New in LEBED.ai v0.25-beta</div>
-      <p class="changelog-subtitle">We've made some big upgrades to improve your experience!</p>
+      <div class="changelog-title">🚀 What's New in LEBED.ai v0.3-beta</div>
+      <p class="changelog-subtitle">We decided to keep it simple, smart, and efficient. We're introducing the "Tunisian Method" — because coding shouldn't be over-engineered.</p>
     </div>
     <div class="modal-body changelog-body">
       <ul class="changelog-list">
         <li>
-          <span class="changelog-icon">🎨</span>
+          <span class="changelog-icon">⚡</span>
           <div class="changelog-text">
-            <strong>UI/UX Overhaul</strong>
-            <span>Fresh new interface changes and a dedicated Dark/Light Mode toggle switch (Dark mode is default).</span>
+            <strong>Codec Mode</strong>
+            <span>Toggle it on for pure, readable, and direct coding logic. No spaghetti code, just straight algorithms (DÉBUT, SI, ALORS, FIN) — with a brand new special UI.</span>
           </div>
         </li>
         <li>
           <span class="changelog-icon">📱</span>
           <div class="changelog-text">
-            <strong>Mobile Optimized</strong>
-            <span>Completely rebuilt UI/UX for seamless usage on mobile phones and tablets.</span>
+            <strong>PWA Ready</strong>
+            <span>Install LEBED.ai on your device and take your AI assistant everywhere.</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">🎨</span>
+          <div class="changelog-text">
+            <strong>Pro UI/UX</strong>
+            <span>Cleaner icons, better contrast, and micro-interactions that feel like butter.</span>
+          </div>
+        </li>
+        <li>
+          <span class="changelog-icon">📂</span>
+          <div class="changelog-text">
+            <strong>Pro Features</strong>
+            <span>Search your history, pin important chats, and export to PDF/TXT.</span>
           </div>
         </li>
         <li>
           <span class="changelog-icon">🛡️</span>
           <div class="changelog-text">
-            <strong>Safe for Everyone</strong>
-            <span>Enhanced AI guardrails making it secure and suitable for all age groups (including under 18).</span>
-          </div>
-        </li>
-        <li>
-          <span class="changelog-icon">🎙️</span>
-          <div class="changelog-text">
-            <strong>Voice-to-Text</strong>
-            <span>Speak directly to the AI with our new voice input option.</span>
-          </div>
-        </li>
-        <li>
-          <span class="changelog-icon">📁</span>
-          <div class="changelog-text">
-            <strong>File &amp; Image Uploads</strong>
-            <span>Attach photos and files directly into your conversations.</span>
-          </div>
-        </li>
-        <li>
-          <span class="changelog-icon">💻</span>
-          <div class="changelog-text">
-            <strong>Enhanced Developer Experience</strong>
-            <span>Improved code block formatting with custom syntax highlighting and 1-click Direct Copy buttons.</span>
-          </div>
-        </li>
-        <li>
-          <span class="changelog-icon">☕</span>
-          <div class="changelog-text">
-            <strong>Support the Project</strong>
-            <span>Added a dedicated Support/Donate option for USD &amp; TND to help keep LEBED.ai running!</span>
+            <strong>Anti-Spam</strong>
+            <span>A smoother, controlled workflow for a better experience.</span>
           </div>
         </li>
       </ul>
+      <p class="changelog-outro">The interface is cleaner, the logic is sharper, and the experience is faster.</p>
     </div>
     <div class="modal-footer changelog-footer">
-      <button class="btn btn-save changelog-btn" id="changelogCloseBtn">Explore v0.25-beta 🚀</button>
+      <button class="btn btn-save changelog-btn" id="changelogCloseBtn">Explore v0.3-beta 🚀</button>
     </div>
   </div>
 </div>
